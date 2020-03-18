@@ -1,0 +1,18 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core/",
+            "App\\": "App/",
+            "Config\\": "Config/",
+            "Controllers\\": "Controllers/",
+            "Models\\": "Models/",
+            "URL\\": "URL/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    },
+    "require": {
+        "jenssegers/blade": "1.1.0"
+    }
+}
