@@ -21,13 +21,6 @@ class Dispatcher
 
     public function loadController()
     {
-        // $name = $this->request->controller . "Controller";
-        // $file = ROOT . 'Controllers/' . $name . '.php'; //E:/xampp/htdocs/mvc/
-        // echo $file;
-        // require($file);
-        // $controller = new $name();
-        // return $controller;
-
         $name = "Controllers\\" . $this->request->controller . "Controller";
         $controller = new $name();
         return $controller;

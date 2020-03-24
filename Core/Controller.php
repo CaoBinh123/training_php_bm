@@ -5,8 +5,8 @@ namespace Core;
     {
         public $vars = [];
         public $layout = "default";
-
-        public function set($d)
+        
+        public function set($d) // set array
         {
             $this->vars = array_merge($this->vars, $d);
         }
@@ -25,7 +25,7 @@ namespace Core;
             }
         }
 
-        private function secure_input($data)
+        protected function secure_input($data)
         {
             $data = trim($data);
             $data = stripslashes($data);
