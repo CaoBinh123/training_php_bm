@@ -13,6 +13,9 @@
         "optimize-autoloader": true
     },
     "require": {
-        "jenssegers/blade": "1.1.0"
+        "jenssegers/blade": "1.1.0",
+        "doctrine/orm": "^2.6.2",
+        "symfony/yaml": "2.*",
+        "dflydev/doctrine-orm-service-provider": "^2.0"
     }
 }

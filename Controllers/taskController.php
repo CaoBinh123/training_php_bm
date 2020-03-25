@@ -26,8 +26,6 @@ class taskController extends Controller
     public function create()
     {
         if (isset($_POST['submit'])) {
-            $this->task->setTitle(Controller::secure_input($_POST['title']));
-            $this->task->setDescription(Controller::secure_input($_POST['description']));
             if ($this->taskReponsitory->create()) {
                 header("Location: " . WEBROOT . "Task/index");
             }
@@ -37,22 +35,24 @@ class taskController extends Controller
 
     public function update($id)
     {
-        if (isset($_POST['submit'])) {
-            $this->task->setTitle(Controller::secure_input($_POST['title']));
-            $this->task->setDescription(Controller::secure_input($_POST['description']));
-            if ($this->taskReponsitory->update($id)) {
-                header("Location: " . WEBROOT . "Task/index");
+        if ($id) {
+            if (isset($_POST['submit'])) {
+                if ($this->taskReponsitory->update($id)) {
+                    header("Location: " . WEBROOT . "Task/index");
+                }
             }
+            $d['task'] = $this->taskReponsitory->getById($id);
+            $this->set($d);
+            $this->render('update');
         }
-        $d['task'] = $this->taskReponsitory->getById($id);
-        $this->set($d);
-        $this->render('update');
     }
 
     public function delete($id)
     {
-        if ($this->taskReponsitory->delete($id)) {
-            header("Location: " . WEBROOT . "Task/index");
+        if ($id) {
+            if ($this->taskReponsitory->delete($id)) {
+                header("Location: " . WEBROOT . "Task/index");
+            }
         }
     }
 }

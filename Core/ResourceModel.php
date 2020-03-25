@@ -4,6 +4,7 @@ namespace Core;
 use Config\Database;
 use Core\ResourceModelInterface;
 use Core\Model;
+use Models\TaskModel;
 
 class ResourceModel implements ResourceModelInterface
 {
@@ -20,47 +21,48 @@ class ResourceModel implements ResourceModelInterface
 
     public function create()
     {
-        $model = $this->model->getProperties();
-        $sql = "INSERT INTO " . $this->table;
-        $sql .= " (`".implode("`, `", array_keys($model))."`)";
-        $sql .= " VALUES (:".implode(", :", array_keys($model)).") ";
-        $result = Database::getBdd()->prepare($sql);
-        $result = $result->execute($model);
-        return $result; // thuc thi dc se tra ve 1
-        //return Database::getBdd()->lastInsertId();// tra ve id cua ban ghi vua ms insert;
+        require_once "../bootstrap.php";
+        $this->model->setTitle(Controller::secure_input($_POST['title']));
+        $this->model->setDescription(Controller::secure_input($_POST['description']));
+        $entityManager->persist($this->model);
+        $entityManager->flush();
+        return true;
     }
 
     public function update($id)
     {
-        $model = $this->model->getProperties();
-        $sql = "UPDATE $this->table SET ";
-        foreach ($model as $key=>$value) {
-            $sql .= "$key = :$key" . (next($model) ? ", " : "");
-        }
-        $sql .= " WHERE $this->id = $id";
-        $result = Database::getBdd()->prepare($sql);
-        $result = $result->execute($model);
-        return $result;
+        require_once "../bootstrap.php";
+        $result =  $entityManager->getRepository(TaskModel::class)->find($id);
+        $result->setTitle(Controller::secure_input($_POST['title']));
+        $result->setDescription(Controller::secure_input($_POST['description']));
+        $entityManager->flush();
+        return true;
     }
 
     public function delete($id)
     {
-        $sql = "DELETE FROM " . $this->table . " WHERE $this->id = $id";
-        $result = Database::getBdd()->query($sql);
-        return $result;
+        require_once "../bootstrap.php";
+        $result =  $entityManager->find(TaskModel::class, $id);
+        if ($result != null) {
+            $entityManager->remove($result);
+            $entityManager->flush();
+            return true;
+        } else {
+            die("ID not exist !");
+        }
     }
 
     public function getAll()
     {
-        $sql = "SELECT * FROM " . $this->table;
-        $result = Database::getBdd()->query($sql);
-        return $result->fetchAll();
+        require_once "../bootstrap.php";
+        $result = $entityManager->getRepository(TaskModel::class)->findAll();
+        return $result;
     }
 
     public function getById($id)
     {
-        $sql = "SELECT * FROM " . $this->table . " WHERE $this->id = $id";
-        $result = Database::getBdd()->query($sql);
-        return $result->fetch();
+        require_once "../bootstrap.php";
+        $result =  $entityManager->getRepository(TaskModel::class)->find($id);
+        return $result;
     }
 }

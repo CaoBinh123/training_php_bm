@@ -25,7 +25,7 @@ namespace Core;
             }
         }
 
-        protected function secure_input($data)
+        public function secure_input($data)
         {
             $data = trim($data);
             $data = stripslashes($data);
